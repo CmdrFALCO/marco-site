@@ -121,7 +121,7 @@ const sectionVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.35, ease: "easeOut" },
+    transition: { duration: 0.35, ease: "easeOut" as const },
   },
 };
 
@@ -216,336 +216,347 @@ export default function Home() {
   );
 
   return (
-    <div className="space-y-12">
-      <header className="flex flex-col gap-6 border-b border-border-subtle pb-8 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex items-center gap-3">
-          <div className="rounded-full border border-border-subtle px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase">
-            MG
-          </div>
-        </div>
-        <nav className="flex flex-wrap items-center gap-2 text-sm text-text-muted">
-          {navItems.map((item) => {
-            const isActive = activeSection === item.id;
-            return (
-              <button
-                key={item.id}
-                className={`rounded-full px-3 py-2 transition-colors hover:bg-accent-soft hover:text-text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0 ${
-                  isActive ? "bg-accent-soft/60 text-text-primary ring-1 ring-accent" : ""
-                }`}
-                type="button"
-                onClick={() => scrollToSection(item.id)}
+    <div className="space-y-12 md:space-y-16">
+          <header className="flex flex-col gap-6 border-b border-white/10 pb-8 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="rounded-full border border-white/20 px-3 py-1 text-xs font-semibold tracking-[0.2em] uppercase text-slate-200">
+                MG
+              </div>
+            </div>
+            <nav className="flex flex-wrap gap-2 md:gap-3 text-xs md:text-sm max-w-3xl mx-auto">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    className={`rounded-full border px-3 md:px-4 py-1.5 transition-colors ${
+                      isActive
+                        ? "border-slate-200 bg-slate-100 text-slate-900"
+                        : "border-slate-700/70 bg-slate-900/60 text-slate-200/85 hover:border-slate-400 hover:text-slate-50"
+                    }`}
+                    type="button"
+                    onClick={() => scrollToSection(item.id)}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </nav>
+          </header>
+
+          <section className="rounded-2xl border border-white/20 bg-gradient-to-b from-white/6 to-white/[0.02] px-5 md:px-8 py-6 md:py-8 shadow-[0_20px_50px_rgba(0,0,0,0.65)]">
+            <div className="grid gap-8 lg:grid-cols-[1.15fr_0.95fr] lg:items-start lg:gap-10">
+              <div className="space-y-6 max-w-3xl mx-auto">
+                <p className="text-sm md:text-base font-medium uppercase tracking-[0.2em] text-slate-400">
+                  Project Lead - HV Battery Pre-Development
+                </p>
+                <div className="space-y-3">
+                  <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-slate-50">
+                    Dr.-Ing. Marco Giannantonio
+                  </h1>
+                  <p className="text-sm md:text-base font-medium uppercase tracking-[0.2em] text-slate-400">
+                    HV battery and electrified powertrain strategy at Mercedes-Benz AG
+                  </p>
+                </div>
+                <p className="text-sm md:text-base leading-relaxed text-slate-200/90">
+                  Driving high-voltage battery pre-development, systems integration, and technology scouting to translate
+                  strategic electrification goals into rigorous engineering roadmaps for next-generation Mercedes-Benz
+                  vehicles.
+                </p>
+                <p className="text-sm text-slate-400">Current focus: {MODULES[activeIndex].title}</p>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <a
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-600/60 bg-slate-900/60 px-4 py-1.5 text-sm font-medium text-slate-100 hover:border-slate-300 hover:bg-slate-800 transition-colors"
+                    href="https://www.linkedin.com/in/dr-ing-marco-giannantonio-518383140/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open LinkedIn profile
+                  </a>
+                  <button
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-600/60 bg-slate-900/60 px-4 py-1.5 text-sm font-medium text-slate-100 hover:border-slate-300 hover:bg-slate-800 transition-colors"
+                    type="button"
+                  >
+                    View profile overview
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                {MODULES.map((card, index) => {
+                  const isActive = index === activeIndex;
+                  return (
+                    <motion.button
+                      key={card.id}
+                      type="button"
+                      onMouseEnter={() => setActiveIndex(index)}
+                      onFocus={() => setActiveIndex(index)}
+                      tabIndex={0}
+                      initial={false}
+                      animate={{
+                        scale: isActive ? 1.02 : 1,
+                      }}
+                      className={`rounded-xl border border-white/6 bg-slate-900/70 px-4 md:px-5 py-4 md:py-5 text-left shadow-[0_14px_30px_rgba(0,0,0,0.55)] backdrop-blur-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                        isActive
+                          ? "ring-1 ring-accent bg-slate-800/70"
+                          : "hover:border-slate-500/70 hover:bg-slate-800/50"
+                      }`}
+                    >
+                      <div className="max-w-3xl">
+                        <h3 className="text-sm md:text-base font-semibold text-slate-50 mb-2">{card.title}</h3>
+                        <p className="text-xs md:text-sm leading-relaxed text-slate-200/90">{card.description}</p>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          <div className="space-y-12 md:space-y-14">
+            <section id="overview" className="scroll-mt-24">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={sectionVariants}
+                className="rounded-2xl border border-white/20 bg-gradient-to-b from-white/6 to-white/[0.02] px-5 md:px-8 py-6 md:py-8 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
               >
-                {item.label}
-              </button>
-            );
-          })}
-        </nav>
-      </header>
-
-      <main className="grid gap-12 lg:grid-cols-[1.15fr_0.95fr] lg:items-start lg:gap-14">
-        <section className="space-y-8">
-          <div className="space-y-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">
-              Project Lead - HV Battery Pre-Development
-            </p>
-            <div className="space-y-2">
-              <h1 className="text-4xl font-semibold leading-tight sm:text-5xl">Dr.-Ing. Marco Giannantonio</h1>
-              <p className="text-lg text-text-muted">
-                HV battery and electrified powertrain strategy at Mercedes-Benz AG
-              </p>
-            </div>
-            <p className="max-w-2xl text-base leading-relaxed text-text-muted">
-              Driving high-voltage battery pre-development, systems integration, and technology scouting to translate
-              strategic electrification goals into rigorous engineering roadmaps for next-generation Mercedes-Benz
-              vehicles.
-            </p>
-            <p className="text-sm text-text-muted/80">Current focus: {MODULES[activeIndex].title}</p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <a
-              className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-body transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0"
-              href="https://www.linkedin.com/in/dr-ing-marco-giannantonio-518383140/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Open LinkedIn profile
-            </a>
-            <button
-              className="rounded-full border border-border-subtle px-5 py-3 text-sm font-semibold text-text-primary transition-colors hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0"
-              type="button"
-            >
-              View profile overview
-            </button>
-          </div>
-        </section>
-
-        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
-          {MODULES.map((card, index) => {
-            const isActive = index === activeIndex;
-            return (
-              <motion.button
-                key={card.id}
-                type="button"
-                onMouseEnter={() => setActiveIndex(index)}
-                onFocus={() => setActiveIndex(index)}
-                tabIndex={0}
-                initial={false}
-                animate={{
-                  scale: isActive ? 1.02 : 1,
-                  borderColor: isActive ? "rgba(79, 163, 217, 0.85)" : "rgba(30, 41, 51, 1)",
-                  backgroundColor: isActive ? "rgba(26, 42, 58, 0.6)" : "rgba(12, 17, 23, 1)",
-                }}
-                className={`rounded-2xl border px-5 py-5 text-left transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0 sm:px-6 sm:py-6 ${
-                  isActive
-                    ? "bg-accent-soft/50 shadow-lg ring-1 ring-accent"
-                    : "bg-surface hover:border-accent/40 hover:bg-accent-soft/30 hover:shadow-md"
-                }`}
-              >
-                <h3 className="text-lg font-semibold text-text-primary">{card.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-text-muted">{card.description}</p>
-              </motion.button>
-            );
-          })}
-        </section>
-      </main>
-
-      <div className="space-y-16 border-t border-border-subtle mt-6 pt-12">
-        <section id="overview" className="scroll-mt-24 space-y-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={sectionVariants}
-            className="space-y-3"
-          >
-            <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">Overview</p>
-              <h2 className="text-2xl font-semibold text-text-primary">Executive Summary</h2>
-            </div>
-            <div className="max-w-3xl space-y-3 text-sm leading-relaxed text-text-muted">
-              <p>
-                Marco Giannantonio is a senior R&D engineer focused on high-voltage battery systems and long-term
-                electrification strategy at Mercedes-Benz. His work bridges technical depth with cross-functional
-                coordination, from early concept definition to platform-level industrialization.
-              </p>
-              <p>
-                He steers battery technology roadmaps, aligns suppliers and internal teams, and ensures that cell,
-                module, and pack decisions support both performance targets and long-term cost, safety, and
-                sustainability goals. His experience covers eDrive architecture, battery thermal design, and
-                simulation-based validation workflows used across multiple vehicle lines.
-              </p>
-              <p>
-                With a background that combines engineering rigor and leadership in complex development programs, he
-                helps shape the next generation of Mercedes electric platforms - balancing innovation, feasibility, and
-                strategic direction to deliver reliable, scalable solutions.
-              </p>
-            </div>
-          </motion.div>
-        </section>
-
-        <section id="experience" className="scroll-mt-24 space-y-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={sectionVariants}
-            className="space-y-4"
-          >
-            <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">Experience</p>
-              <h2 className="text-2xl font-semibold text-text-primary">
-                Experience Timeline - Dr.-Ing. Marco Giannantonio
-              </h2>
-            </div>
-            <div className="space-y-3">
-              {EXPERIENCE.map((entry) => (
-                <div
-                  key={`${entry.role}-${entry.period}`}
-                  className="space-y-2 rounded-2xl border border-border-subtle bg-surface px-4 py-4 sm:px-5 sm:py-5"
-                >
-                  <div className="space-y-1">
-                    <p className="text-sm font-semibold text-text-primary">{entry.role}</p>
-                    <p className="text-xs text-text-muted">{entry.company}</p>
-                    <p className="text-xs text-text-muted">
-                      {entry.period} - {entry.location}
+                <div className="space-y-3 md:space-y-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Overview</p>
+                  <h2 className="text-lg md:text-xl font-semibold text-slate-50">Executive Summary</h2>
+                  <div className="space-y-3 text-sm md:text-base leading-relaxed text-slate-200/90">
+                    <p>
+                      Marco Giannantonio is a senior R&D engineer focused on high-voltage battery systems and long-term
+                      electrification strategy at Mercedes-Benz. His work bridges technical depth with cross-functional
+                      coordination, from early concept definition to platform-level industrialization.
+                    </p>
+                    <p>
+                      He steers battery technology roadmaps, aligns suppliers and internal teams, and ensures that cell,
+                      module, and pack decisions support both performance targets and long-term cost, safety, and
+                      sustainability goals. His experience covers eDrive architecture, battery thermal design, and
+                      simulation-based validation workflows used across multiple vehicle lines.
+                    </p>
+                    <p>
+                      With a background that combines engineering rigor and leadership in complex development programs,
+                      he helps shape the next generation of Mercedes electric platforms - balancing innovation,
+                      feasibility, and strategic direction to deliver reliable, scalable solutions.
                     </p>
                   </div>
-                  <ul className="space-y-1.5 text-sm leading-relaxed text-text-muted">
-                    {entry.bullets.map((line) => (
-                      <li key={line} className="leading-relaxed">
-                        {line}
-                      </li>
+                </div>
+              </motion.div>
+            </section>
+
+            <section id="experience" className="scroll-mt-24">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={sectionVariants}
+                className="rounded-2xl border border-white/20 bg-gradient-to-b from-white/6 to-white/[0.02] px-5 md:px-8 py-6 md:py-8 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
+              >
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Experience</p>
+                  <h2 className="text-lg md:text-xl font-semibold text-slate-50">
+                    Experience Timeline - Dr.-Ing. Marco Giannantonio
+                  </h2>
+                </div>
+                <div className="space-y-4 md:space-y-5 mt-4">
+                  {EXPERIENCE.map((entry) => (
+                    <div
+                      key={`${entry.role}-${entry.period}`}
+                      className="space-y-2 rounded-xl border border-white/10 bg-slate-900/70 px-4 py-4 md:px-5 md:py-5"
+                    >
+                      <div className="space-y-1">
+                        <p className="text-sm font-semibold text-slate-50">{entry.role}</p>
+                        <p className="text-xs text-slate-300">{entry.company}</p>
+                        <p className="text-xs text-slate-400">
+                          {entry.period} - {entry.location}
+                        </p>
+                      </div>
+                      <ul className="space-y-1.5 text-sm leading-relaxed text-slate-200/85">
+                        {entry.bullets.map((line) => (
+                          <li key={line} className="leading-relaxed">
+                            {line}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </section>
+
+            <section id="focus-areas" className="scroll-mt-24">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={sectionVariants}
+                className="rounded-2xl border border-white/20 bg-gradient-to-b from-white/6 to-white/[0.02] px-5 md:px-8 py-6 md:py-8 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
+              >
+                <div className="space-y-4 md:space-y-5">
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">
+                      Focus Areas
+                    </p>
+                    <h2 className="text-lg md:text-xl font-semibold text-slate-50">Core Domains</h2>
+                  </div>
+
+                  <div className="space-y-4 md:space-y-5">
+                    {MODULES.map((module) => (
+                      <div
+                        key={module.id}
+                        className="rounded-xl border border-white/10 bg-slate-900/70 px-4 md:px-5 py-4 md:py-5"
+                      >
+                        <h3 className="text-sm md:text-base font-semibold text-slate-50 mb-2">{module.title}</h3>
+                        <p className="text-xs md:text-sm leading-relaxed text-slate-200/90">{module.description}</p>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
+              </motion.div>
+            </section>
 
-        <section id="focus-areas" className="scroll-mt-24 space-y-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={sectionVariants}
-            className="space-y-4"
-          >
-            <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">Focus Areas</p>
-              <h2 className="text-2xl font-semibold text-text-primary">Core Domains</h2>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {MODULES.map((module) => (
-                <div
-                  key={module.id}
-                  className="rounded-2xl border border-border-subtle bg-surface px-4 py-4 sm:px-5 sm:py-5"
-                >
-                  <p className="text-sm font-semibold text-text-primary">{module.title}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-text-muted">{module.description}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </section>
-
-        <section id="research" className="scroll-mt-24 space-y-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={sectionVariants}
-            className="space-y-4"
-          >
-            <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">Research & PhD</p>
-              <h2 className="text-2xl font-semibold text-text-primary">
-                Automatisierter Variantenentwurf elektrifizierter Getriebekonzepte
-              </h2>
-              <p className="text-xs text-text-muted">
-                Doctor of Engineering (Dr.-Ing.) - Technische Universitat Darmstadt (2018-2021)
-              </p>
-            </div>
-            <div className="max-w-3xl space-y-3 text-sm leading-relaxed text-text-muted">
-              <p>
-                Marco's doctoral research focused on the automated generation, evaluation, and optimization of electric
-                and electrified drivetrain concepts. The work combined modeling, simulation, and algorithmic design-space
-                exploration to systematically identify powertrain architectures that balance efficiency, performance,
-                packaging, and production feasibility.
-              </p>
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">Key themes</p>
-                <ul className="list-disc space-y-1 pl-5 text-sm text-text-muted">
-                  <li>Automated synthesis of powertrain topologies for electric and hybrid drives</li>
-                  <li>Multi-criteria evaluation of system variants using simulation and data analytics</li>
-                  <li>Structural, mechanical, and functional assessment of transmission concepts</li>
-                  <li>Optimization workflows developed in Python, C#, and engineering toolchains</li>
-                  <li>Integration of physical models with decision-support algorithms</li>
-                </ul>
-              </div>
-              <p>
-                The results provide a framework for early-phase architecture decisions, enabling teams to explore complex
-                design spaces quickly and identify promising drivetrain configurations long before physical prototypes
-                exist. Marco brings this research mindset directly into HV battery and eDrive strategy, where
-                quantitative reasoning, modeling expertise, and early concept evaluation shape Mercedes-Benz's next
-                generation of electric platforms.
-              </p>
-            </div>
-          </motion.div>
-        </section>
-
-        <section id="contact" className="scroll-mt-24 space-y-4">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={sectionVariants}
-            className="space-y-4"
-          >
-            <div className="space-y-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">Contact</p>
-              <h2 className="text-2xl font-semibold text-text-primary">Get in touch</h2>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
+            <section id="research" className="scroll-mt-24">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={sectionVariants}
+                className="rounded-2xl border border-white/20 bg-gradient-to-b from-white/6 to-white/[0.02] px-5 md:px-8 py-6 md:py-8 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
+              >
                 <div className="space-y-2">
-                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                    placeholder="Your name"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                    Company
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                    placeholder="Organization"
-                    value={company}
-                    onChange={(event) => setCompany(event.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                    placeholder="name@company.com"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                    Message
-                  </label>
-                  <textarea
-                    rows={3}
-                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                    placeholder="How can we collaborate?"
-                    value={message}
-                    onChange={(event) => setMessage(event.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-body transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0 disabled:opacity-60"
-                >
-                  {isSubmitting ? "Sending..." : "Send inquiry"}
-                </button>
-                {submitSuccess && (
-                  <p className="text-sm text-accent">Thank you, your message has been sent.</p>
-                )}
-                {submitError && (
-                  <p className="text-sm text-red-400">
-                    {submitError === "Email service not configured"
-                      ? "Email service is not configured. Please try again later."
-                      : "Something went wrong. Please try again later."}
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Research & PhD</p>
+                  <h2 className="text-lg md:text-xl font-semibold text-slate-50">
+                    Automatisierter Variantenentwurf elektrifizierter Getriebekonzepte
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Doctor of Engineering (Dr.-Ing.) - Technische Universitat Darmstadt (2018-2021)
                   </p>
-                )}
-              </div>
-            </form>
-          </motion.div>
-        </section>
-      </div>
+                </div>
+                <div className="space-y-3 text-sm md:text-base leading-relaxed text-slate-200/90 mt-4">
+                  <p>
+                    Marco&apos;s doctoral research focused on the automated generation, evaluation, and optimization of
+                    electric and electrified drivetrain concepts. The work combined modeling, simulation, and algorithmic
+                    design-space exploration to systematically identify powertrain architectures that balance efficiency,
+                    performance, packaging, and production feasibility.
+                  </p>
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Key themes</p>
+                    <ul className="list-disc space-y-1 pl-5 text-sm text-slate-200/85">
+                      <li>Automated synthesis of powertrain topologies for electric and hybrid drives</li>
+                      <li>Multi-criteria evaluation of system variants using simulation and data analytics</li>
+                      <li>Structural, mechanical, and functional assessment of transmission concepts</li>
+                      <li>Optimization workflows developed in Python, C#, and engineering toolchains</li>
+                      <li>Integration of physical models with decision-support algorithms</li>
+                    </ul>
+                  </div>
+                  <p>
+                    The results provide a framework for early-phase architecture decisions, enabling teams to explore
+                    complex design spaces quickly and identify promising drivetrain configurations long before physical
+                    prototypes exist. Marco brings this research mindset directly into HV battery and eDrive strategy,
+                    where quantitative reasoning, modeling expertise, and early concept evaluation shape Mercedes-Benz&apos;s
+                    next generation of electric platforms.
+                  </p>
+                </div>
+              </motion.div>
+            </section>
+
+            <section id="contact" className="scroll-mt-24">
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={sectionVariants}
+                className="rounded-2xl border border-white/20 bg-gradient-to-b from-white/6 to-white/[0.02] px-5 md:px-8 py-6 md:py-8 shadow-[0_20px_50px_rgba(0,0,0,0.65)]"
+              >
+                <div className="space-y-4 md:space-y-5">
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Contact</p>
+                    <h2 className="text-lg md:text-xl font-semibold text-slate-50">Get in touch</h2>
+                  </div>
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full rounded-md border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/80 focus:border-slate-300"
+                          placeholder="Your name"
+                          value={name}
+                          onChange={(event) => setName(event.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+                          Company
+                        </label>
+                        <input
+                          type="text"
+                          className="w-full rounded-md border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/80 focus:border-slate-300"
+                          placeholder="Organization"
+                          value={company}
+                          onChange={(event) => setCompany(event.target.value)}
+                        />
+                      </div>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          className="w-full rounded-md border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/80 focus:border-slate-300"
+                          placeholder="name@company.com"
+                          value={email}
+                          onChange={(event) => setEmail(event.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+                          Message
+                        </label>
+                        <textarea
+                          rows={3}
+                          className="w-full rounded-md border border-slate-700 bg-slate-950/80 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-300/80 focus:border-slate-300"
+                          placeholder="How can we collaborate?"
+                          value={message}
+                          onChange={(event) => setMessage(event.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-slate-100 px-5 py-2 text-sm font-medium text-slate-900 hover:bg-white hover:border-white transition-colors disabled:opacity-60"
+                      >
+                        {isSubmitting ? "Sending..." : "Send inquiry"}
+                      </button>
+                      {submitSuccess && (
+                        <p className="text-sm text-slate-200">Thank you, your message has been sent.</p>
+                      )}
+                      {submitError && (
+                        <p className="text-sm text-red-400">
+                          {submitError === "Email service not configured"
+                            ? "Email service is not configured. Please try again later."
+                            : "Something went wrong. Please try again later."}
+                        </p>
+                      )}
+                    </div>
+                  </form>
+                </div>
+              </motion.div>
+            </section>
+          </div>
     </div>
   );
 }

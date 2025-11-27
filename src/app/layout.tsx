@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Footer from "./components/Footer";
 
 const siteUrl = "https://example-marco-site.com"; // TODO: replace with production domain
 const ogImageUrl = "/og-image.png";
@@ -78,14 +79,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-body text-text-primary antialiased">
-        <div className="min-h-screen flex justify-center">
-          <div className="relative w-full max-w-6xl px-6 py-10 md:px-10 md:py-12">
-            {/* subtle background accent */}
-            <div className="pointer-events-none fixed inset-0 -z-10 bg-body">
-              <div className="absolute -left-40 -top-40 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
-            </div>
-            {children}
+        <div className="min-h-screen flex flex-col bg-body">
+          {/* subtle background accent */}
+          <div className="pointer-events-none fixed inset-0 -z-10 bg-body">
+            <div className="absolute -left-40 -top-40 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
           </div>
+          <main className="flex-1">
+            <div className="relative w-full max-w-6xl px-6 py-10 md:px-10 md:py-12 mx-auto">
+              {children}
+            </div>
+          </main>
+          <Footer />
         </div>
         <script
           type="application/ld+json"

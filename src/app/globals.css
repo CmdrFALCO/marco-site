@@ -15,3 +15,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Footer-specific link styling to override the global anchor color */
+.footer-link {
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: rgba(255, 255, 255, 1) !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
