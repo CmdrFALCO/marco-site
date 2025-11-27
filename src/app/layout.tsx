@@ -1,10 +1,73 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const siteUrl = "https://example-marco-site.com"; // TODO: replace with production domain
+const ogImageUrl = "/og-image.png";
+
 export const metadata: Metadata = {
-  title: "Dr.-Ing. Marco Giannantonio – HV Battery & Powertrain Strategy",
+  // TODO: Replace with real production URL
+  metadataBase: new URL("https://example-marco-site.com"),
+  title: "Dr.-Ing. Marco Giannantonio - HV Battery & eDrive Strategy",
   description:
-    "Executive profile of Dr.-Ing. Marco Giannantonio, Mercedes-Benz AG – HV battery pre-development and electrified powertrain strategy.",
+    "Project lead for high-voltage battery and eDrive strategy at Mercedes-Benz, shaping next-generation electric platforms through concept engineering and simulation.",
+  keywords: [
+    "Marco Giannantonio",
+    "HV battery",
+    "eDrive",
+    "powertrain architecture",
+    "Mercedes-Benz",
+    "Dr.-Ing.",
+    "simulation and data analytics",
+  ],
+  openGraph: {
+    title: "Dr.-Ing. Marco Giannantonio - HV Battery & eDrive Strategy",
+    description:
+      "Project lead for high-voltage battery and eDrive strategy at Mercedes-Benz, shaping next-generation electric platforms through concept engineering and simulation.",
+    type: "website",
+    locale: "en_US",
+    siteName: "Dr.-Ing. Marco Giannantonio",
+    url: siteUrl,
+    images: [
+      {
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: "Dr.-Ing. Marco Giannantonio – HV Battery & eDrive Strategy",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Dr.-Ing. Marco Giannantonio - HV Battery & eDrive Strategy",
+    description:
+      "Project lead for high-voltage battery and eDrive strategy at Mercedes-Benz, shaping next-generation electric platforms through concept engineering and simulation.",
+    images: [ogImageUrl],
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  alternates: {
+    canonical: siteUrl,
+  },
+};
+
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Dr.-Ing. Marco Giannantonio",
+  jobTitle: "Project Lead - HV Battery Predevelopment",
+  worksFor: {
+    "@type": "Organization",
+    name: "Mercedes-Benz AG",
+  },
+  url: siteUrl,
+  sameAs: ["https://www.linkedin.com/in/dr-ing-marco-giannantonio-518383140/"],
+  knowsAbout: [
+    "High-voltage battery systems",
+    "eDrive and powertrain architecture",
+    "Simulation and data analytics",
+    "Electric vehicle platforms",
+  ],
 };
 
 export default function RootLayout({
@@ -24,6 +87,10 @@ export default function RootLayout({
             {children}
           </div>
         </div>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
       </body>
     </html>
   );

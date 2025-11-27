@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 
 const MODULES = [
@@ -128,6 +128,13 @@ const sectionVariants = {
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeSection, setActiveSection] = useState("overview");
+  const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const scrollToSection = useCallback((id: string) => {
     const el = document.getElementById(id);
@@ -171,6 +178,42 @@ export default function Home() {
   }, []);
 
   const navItems = useMemo(() => NAV_ITEMS, []);
+
+  const handleSubmit = useCallback(
+    async (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      setSubmitError(null);
+      setSubmitSuccess(false);
+      setIsSubmitting(true);
+
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, company, email, message }),
+        });
+        const data = await response.json().catch(() => null);
+
+        if (response.ok && data?.ok) {
+          setSubmitSuccess(true);
+          setName("");
+          setCompany("");
+          setEmail("");
+          setMessage("");
+        } else {
+          const errorMessage =
+            data?.error || "Something went wrong. Please try again later.";
+          setSubmitError(errorMessage);
+        }
+      } catch (error) {
+        console.error("Contact form submit error", error);
+        setSubmitError("Something went wrong. Please try again later.");
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [company, email, message, name],
+  );
 
   return (
     <div className="space-y-12">
@@ -424,56 +467,82 @@ export default function Home() {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-text-muted">Contact</p>
               <h2 className="text-2xl font-semibold text-text-primary">Get in touch</h2>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                  placeholder="Your name"
-                />
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+                    Company
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
+                    placeholder="Organization"
+                    value={company}
+                    onChange={(event) => setCompany(event.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
+                    placeholder="name@company.com"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
+                    Message
+                  </label>
+                  <textarea
+                    rows={3}
+                    className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
+                    placeholder="How can we collaborate?"
+                    value={message}
+                    onChange={(event) => setMessage(event.target.value)}
+                    required
+                  />
+                </div>
               </div>
               <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                  placeholder="Organization"
-                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-body transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0 disabled:opacity-60"
+                >
+                  {isSubmitting ? "Sending..." : "Send inquiry"}
+                </button>
+                {submitSuccess && (
+                  <p className="text-sm text-accent">Thank you, your message has been sent.</p>
+                )}
+                {submitError && (
+                  <p className="text-sm text-red-400">
+                    {submitError === "Email service not configured"
+                      ? "Email service is not configured. Please try again later."
+                      : "Something went wrong. Please try again later."}
+                  </p>
+                )}
               </div>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                  placeholder="name@company.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-xs font-semibold uppercase tracking-[0.14em] text-text-muted">
-                  Message
-                </label>
-                <textarea
-                  rows={3}
-                  className="w-full rounded-lg border border-border-subtle bg-surface px-3 py-2 text-sm text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-1 focus:ring-accent"
-                  placeholder="How can we collaborate?"
-                />
-              </div>
-            </div>
-            <button
-              type="button"
-              className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-body transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-0"
-            >
-              Send inquiry
-            </button>
+            </form>
           </motion.div>
         </section>
       </div>
